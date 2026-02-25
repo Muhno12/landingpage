@@ -1,28 +1,76 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kebijakan Privasi - CIRCELCUANMV</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
-body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#1976D2,#1976D2);color:#fff;}
-.container{max-width:800px;margin:60px auto;padding:30px;background:#fff;color:#222;border-radius:20px;}
-h1{margin-top:0}
-a{display:inline-block;margin-top:30px;text-decoration:none;color:#1976D2;font-weight:600;}
+:root{--p:#1976D2;--g1:#1976D2;--g2:#1976D2;}
+body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;}
+.navbar{background:rgba(25,119,210,.95);height:65px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:50;}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;}
+.logo img{width:30px;height:30px;object-fit:contain;}
+.nav-links a{margin-left:16px;text-decoration:none;color:#fff;font-weight:600;opacity:.95}
+.nav-links a:hover{opacity:1;text-decoration:underline}
+
+.wrap{max-width:900px;margin:34px auto;padding:0 18px;}
+.card{background:#fff;color:#222;border-radius:22px;box-shadow:0 15px 40px rgba(0,0,0,.2);padding:26px 22px;}
+h1{margin:0 0 10px;font-size:28px}
+p,li{line-height:1.9;color:#333}
+ul{margin:10px 0 0;padding-left:18px}
+.note{background:#f6f7ff;border:1px solid rgba(63,99,233,.12);border-radius:16px;padding:14px;margin-top:14px;color:#333}
+footer{text-align:center;padding:26px 0;color:rgba(255,255,255,.75);font-size:14px}
+.wa-float{position:fixed;bottom:18px;right:18px;background:#25D366;color:#fff;padding:13px 16px;border-radius:999px;text-decoration:none;font-weight:700;box-shadow:0 10px 25px rgba(0,0,0,.25);z-index:60}
+.wa-float i{margin-right:8px}
+@media(max-width:720px){.nav-links{display:none}h1{font-size:24px}}
 </style>
 </head>
+
 <body>
+<div class="navbar">
+  <div class="logo">
+    <img src="https://buyer.duniadigitalsb.my.id/uploads/logo/circelcuanmvlogo.png" alt="Logo">
+    CIRCELCUANMV
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#layanan">Layanan</a>
+    <a href="index.html#download">Download</a>
+    <a href="hubungi-kami.html">Kontak</a>
+  </div>
+</div>
 
-<div class="container">
-<h1>Kebijakan Privasi</h1>
-<p>Kami menjaga dan melindungi data pribadi pengguna dengan standar keamanan terbaik.</p>
+<div class="wrap">
+  <div class="card">
+    <h1>Kebijakan Privasi</h1>
+    <p>Kami berkomitmen menjaga data pribadi pengguna CIRCELCUANMV.</p>
 
-<ul>
-<li>Data hanya digunakan untuk kebutuhan transaksi.</li>
-<li>Kami tidak membagikan data kepada pihak ketiga tanpa izin.</li>
-<li>Pengguna dapat meminta penghapusan data kapan saja.</li>
-</ul>
+    <ul>
+      <li>Data digunakan untuk keperluan layanan dan proses transaksi.</li>
+      <li>Kami tidak membagikan data kepada pihak ketiga tanpa izin pengguna (kecuali diwajibkan hukum).</li>
+      <li>Kami menerapkan langkah keamanan untuk melindungi informasi pengguna.</li>
+      <li>Pengguna dapat menghubungi admin untuk pertanyaan terkait data.</li>
+    </ul>
 
+    <div class="note">
+      <b><i class="fa-solid fa-shield-halved"></i> Keamanan</b><br>
+      Jangan berikan OTP / PIN / password ke siapa pun, termasuk pihak yang mengaku admin.
+    </div>
+  </div>
+</div>
+
+<footer>© <span id="y"></span> CIRCELCUANMV. All Rights Reserved.</footer>
+
+<a class="wa-float"
+   href="https://wa.me/6285758942209?text=Halo%20Admin%20CIRCELCUANMV,%20saya%20mau%20tanya%20kebijakan%20privasi."
+   target="_blank" rel="noopener">
+  <i class="fa-brands fa-whatsapp"></i> Chat Admin
+</a>
+
+<script>document.getElementById("y").textContent=new Date().getFullYear();</script>
 </body>
 </html>
