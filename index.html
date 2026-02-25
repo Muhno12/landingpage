@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CIRCELCUANMV - Solusi PPOB Modern</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* palette mirip flambons */
+      --primary:#3f63e9;      /* topbar biru */
+      --primary2:#3b5ee6;
+      --bg1:#3557e6;          /* hero gradient */
+      --bg2:#452fcb;
+      --dark:#1f232a;         /* footer dark */
+      --dark2:#1b1f26;
+      --text:#ffffff;
+      --muted:rgba(255,255,255,.78);
+      --muted2:rgba(255,255,255,.65);
+      --card:rgba(255,255,255,.10);
+      --border:rgba(255,255,255,.14);
+      --shadow:0 16px 40px rgba(0,0,0,.18);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* subtle pattern like flambons */
+    .pattern{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-1;
+      opacity:.38;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,.10) 0 2px, transparent 3px) 0 0/56px 56px,
+        radial-gradient(circle at 85% 30%, rgba(255,255,255,.06) 0 2px, transparent 3px) 0 0/70px 70px,
+        linear-gradient(135deg, rgba(0,0,0,.02), rgba(0,0,0,.06));
+    }
+
+    /* Topbar */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      height:64px;
+      background: rgba(63,99,233,.92);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    .topbar-inner{
+      height:64px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800; font-size:22px;
+      letter-spacing:.2px;
+    }
+    .brand .bolt{font-size:22px; opacity:.95}
+
+    /* desktop nav */
+    .navlinks{
+      display:flex; gap:14px;
+      font-weight:600;
+      color:rgba(255,255,255,.92);
+    }
+    .navlinks a{padding:10px 12px; border-radius:14px}
+    .navlinks a:hover{background: rgba(255,255,255,.12)}
+
+    /* burger */
+    .burger{
+      width:46px;height:46px;border-radius:14px;
+      display:none; align-items:center; justify-content:center;
+      cursor:pointer;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .burger span{
+      display:block;
+      width:22px; height:2px; border-radius:10px;
+      background: rgba(255,255,255,.95);
+      position:relative;
+    }
+    .burger span::before,
+    .burger span::after{
+      content:"";
+      position:absolute; left:0; right:0;
+      height:2px; border-radius:10px;
+      background: rgba(255,255,255,.95);
+    }
+    .burger span::before{top:-7px}
+    .burger span::after{top:7px}
+
+    /* drawer overlay */
+    .overlay{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.35);
+      opacity:0; pointer-events:none;
+      transition:opacity .22s ease;
+      z-index:60;
+    }
+
+    /* drawer (slide menu) */
+    .drawer{
+      position:fixed; top:0; left:-340px;
+      width:340px; max-width:86vw;
+      height:100vh;
+      background: rgba(63,99,233,.98);
+      border-right:1px solid rgba(255,255,255,.12);
+      box-shadow: 20px 0 50px rgba(0,0,0,.25);
+      transition:left .25s ease;
+      z-index:70;
+      padding:16px 18px;
+    }
+    .drawer-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:6px 0 10px;
+    }
+    .drawer-title{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800; font-size:22px;
+    }
+    .drawer-close{
+      width:44px;height:44px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.10);
+      display:flex; align-items:center; justify-content:center;
+      font-size:24px; cursor:pointer;
+    }
+    .drawer-links{
+      margin-top:18px;
+      display:flex; flex-direction:column;
+      gap:18px;
+      font-weight:600;
+      font-size:18px;
+    }
+    .drawer-links a{
+      padding:10px 6px;
+    }
+
+    /* active drawer */
+    body.drawer-open .overlay{opacity:1; pointer-events:auto}
+    body.drawer-open .drawer{left:0}
+
+    /* HERO */
+    header.hero{
+      padding:52px 0 22px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:22px;
+      align-items:center;
+    }
+    .hero h1{
+      margin:0 0 10px;
+      font-size:40px;
+      letter-spacing:-.6px;
+      line-height:1.1;
+    }
+    .hero p{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:15.5px;
+      line-height:1.75;
+    }
+    .cta{
+      display:flex; gap:12px; flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:12px 16px;
+      border-radius:16px;
+      font-weight:800;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.12);
+      color:rgba(255,255,255,.95);
+      box-shadow: var(--shadow);
+      transition: transform .12s ease, background .12s ease;
+    }
+    .btn:hover{transform: translateY(-1px)}
+    .btn-primary{
+      background: rgba(255,255,255,.95);
+      color:#222;
+      border-color: rgba(255,255,255,.30);
+    }
+
+    .shot{
+      border-radius:22px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      transform: translateY(0);
+      transition: transform .25s ease;
+    }
+    .shot:hover{transform: translateY(-3px)}
+    .shot img{width:100%; display:block}
+
+    /* Sections */
+    section{padding:54px 0}
+    .title{
+      font-size:30px;
+      margin:0 0 18px;
+      letter-spacing:-.3px;
+    }
+    .underline{
+      width:54px; height:4px;
+      background: rgba(255,255,255,.75);
+      border-radius:999px;
+      margin-top:8px;
+      opacity:.55;
+    }
+    .desc{
+      margin:0;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:15px;
+      max-width:720px;
+    }
+
+    .cards{
+      margin-top:22px;
+      display:grid;
+      grid-template-columns: repeat(3,1fr);
+      gap:14px;
+    }
+    .card{
+      background: rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: var(--shadow);
+      transition: transform .18s ease;
+    }
+    .card:hover{transform: translateY(-3px)}
+    .card h3{margin:0 0 6px; font-size:16px}
+    .card p{margin:0; color:var(--muted); font-size:14px; line-height:1.7}
+
+    /* Download section */
+    .download-box{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+      align-items:center;
+      background: rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 22px;
+      padding:16px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Footer (mirip screenshot terakhir) */
+    footer{
+      margin-top:24px;
+      background: linear-gradient(180deg, var(--dark), var(--dark2));
+      border-top:1px solid rgba(255,255,255,.08);
+      padding:42px 0 24px;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
+      gap:22px;
+    }
+    .footer-title{
+      font-size:22px;
+      margin:0 0 8px;
+      font-weight:800;
+    }
+    .footer-h{
+      margin:0 0 12px;
+      font-size:20px;
+      font-weight:800;
+    }
+    .footer-line{
+      width:46px; height:3px;
+      background: rgba(63,99,233,.95);
+      border-radius:999px;
+      margin-bottom:14px;
+    }
+    .footer-p{
+      margin:0 0 14px;
+      color: rgba(255,255,255,.72);
+      line-height:1.85;
+      font-size:14px;
+    }
+    .footer-links a{
+      display:block;
+      padding:10px 0;
+      color: rgba(255,255,255,.72);
+      font-size:14px;
+    }
+    .footer-links a:hover{color:#fff}
+
+    .social{
+      display:flex; gap:10px; margin-top:12px;
+    }
+    .social a{
+      width:42px;height:42px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
+      transition: transform .14s ease, background .14s ease;
+    }
+    .social a:hover{transform: translateY(-2px); background: rgba(255,255,255,.12)}
+    .icon{font-weight:800; font-size:14px}
+
+    .contact-item{
+      display:flex; gap:10px; align-items:flex-start;
+      margin:12px 0;
+      color: rgba(255,255,255,.72);
+      font-size:14px;
+      line-height:1.7;
+    }
+    .contact-item span{
+      width:18px; display:inline-flex; justify-content:center;
+      opacity:.9;
+    }
+
+    .copyright{
+      margin-top:22px;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.08);
+      text-align:center;
+      color: rgba(255,255,255,.55);
+      font-size:13px;
+    }
+
+    /* Simple reveal animation */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      transition: opacity .45s ease, transform .45s ease;
+    }
+    .reveal.show{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero-grid{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr}
+      .download-box{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr}
+      .footer-h{font-size:22px}
+    }
+    @media (max-width: 760px){
+      .navlinks{display:none}
+      .burger{display:flex}
+      .hero h1{font-size:34px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="pattern"></div>
+
+  <!-- Drawer -->
+  <div class="overlay" onclick="closeDrawer()"></div>
+  <aside class="drawer" aria-label="Menu">
+    <div class="drawer-head">
+      <div class="drawer-title"><span style="opacity:.95">⚡</span> CIRCELCUANMV</div>
+      <div class="drawer-close" onclick="closeDrawer()" aria-label="Tutup">×</div>
+    </div>
+
+    <nav class="drawer-links">
+      <a href="#home" onclick="closeDrawer()">Home</a>
+      <a href="#tentang" onclick="closeDrawer()">Tentang Kami</a>
+      <a href="#fitur" onclick="closeDrawer()">Fitur</a>
+      <a href="#testimoni" onclick="closeDrawer()">Testimoni</a>
+      <a href="#download" onclick="closeDrawer()">Download</a>
+    </nav>
+  </aside>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#home" aria-label="CIRCELCUANMV">
+        <span class="bolt">⚡</span>
+        <span>CIRCELCUANMV</span>
+      </a>
+
+      <nav class="navlinks">
+        <a href="#home">Home</a>
+        <a href="#tentang">Tentang Kami</a>
+        <a href="#fitur">Fitur</a>
+        <a href="#testimoni">Testimoni</a>
+        <a href="#download">Download</a>
+      </nav>
+
+      <div class="burger" onclick="openDrawer()" aria-label="Buka menu">
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header id="home" class="hero">
+    <div class="container hero-grid">
+      <div class="reveal">
+        <h1>Satu Aplikasi Untuk Semua Transaksi</h1>
+        <p>
+          Beli kebutuhan digital seperti <b>Pulsa</b>, <b>Paket Data</b>, <b>Token Listrik</b>,
+          <b>Topup Games</b> & <b>Bayar Tagihan Bulanan</b> bersama <b>CIRCELCUANMV</b>.
+          Jadikan hidupmu lebih mudah tanpa harus keluar rumah.
+        </p>
+
+        <div class="cta">
+          <a class="btn btn-primary"
+             href="https://play.google.com/store/apps/details?id=com.circelcuanmv"
+             target="_blank" rel="noopener">Download Sekarang</a>
+          <a class="btn" href="#fitur">Pelajari Fitur</a>
+        </div>
+      </div>
+
+      <div class="shot reveal">
+        <img src="hero1.jpg" alt="Poster CIRCELCUANMV">
+      </div>
+    </div>
+  </header>
+
+  <!-- Tentang -->
+  <section id="tentang">
+    <div class="container">
+      <div class="reveal">
+        <div class="title">Tentang CIRCELCUANMV</div>
+        <div class="underline"></div>
+        <p class="desc">
+          (Nanti kakak isi) CIRCELCUANMV adalah platform PPOB yang menyediakan berbagai layanan pembayaran dan pengisian ulang
+          dengan pengalaman pengguna yang unggul.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fitur -->
+  <section id="fitur">
+    <div class="container">
+      <div class="reveal">
+        <div class="title">Fitur</div>
+        <div class="underline"></div>
+        <p class="desc">(Nanti kakak isi) Beragam layanan untuk kebutuhan transaksi harian.</p>
+
+        <div class="cards">
+          <div class="card reveal">
+            <h3>Pulsa & Paket Data</h3>
+            <p>Isi ulang semua operator dengan cepat.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Token Listrik PLN</h3>
+            <p>Beli token kapan saja tanpa antre.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Topup Game</h3>
+            <p>Topup mudah untuk berbagai game.</p>
+          </div>
+          <div class="card reveal">
+            <h3>E-Wallet</h3>
+            <p>Isi saldo e-wallet (opsional sesuai fitur aplikasi).</p>
+          </div>
+          <div class="card reveal">
+            <h3>Pembayaran Tagihan</h3>
+            <p>PDAM, listrik, dan tagihan lainnya.</p>
+          </div>
+          <div class="card reveal">
+            <h3>Riwayat Transaksi</h3>
+            <p>Cek semua transaksi dengan rapi dan detail.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimoni -->
+  <section id="testimoni">
+    <div class="container">
+      <div class="reveal">
+        <div class="title">Testimoni</div>
+        <div class="underline"></div>
+        <p class="desc">(Nanti kakak isi) Tambahkan testimoni agar lebih meyakinkan.</p>
+
+        <div class="cards">
+          <div class="card reveal">
+            <h3>“Transaksinya cepat”</h3>
+            <p>Praktis banget, tinggal klik-klik selesai.</p>
+          </div>
+          <div class="card reveal">
+            <h3>“Fiturnya lengkap”</h3>
+            <p>Semua kebutuhan PPOB ada dalam satu aplikasi.</p>
+          </div>
+          <div class="card reveal">
+            <h3>“Tampilan nyaman”</h3>
+            <p>Enak dilihat dan gampang dipakai di HP.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download -->
+  <section id="download">
+    <div class="container">
+      <div class="reveal">
+        <div class="title">Download</div>
+        <div class="underline"></div>
+        <p class="desc">Tunggu apa lagi? Download sekarang di Google Play.</p>
+
+        <div class="download-box">
+          <div class="reveal">
+            <a class="btn btn-primary"
+               href="https://play.google.com/store/apps/details?id=com.circelcuanmv"
+               target="_blank" rel="noopener">
+              Download di Google Play
+            </a>
+            <p style="margin:12px 0 0; color:var(--muted); font-size:14px; line-height:1.7">
+              (Nanti kakak isi) Bisa juga ditambahkan QR Code, link WhatsApp CS, dll.
+            </p>
+          </div>
+
+          <div class="shot reveal">
+            <img src="hero2.jpg" alt="Screenshot aplikasi CIRCELCUANMV">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (mirip screenshot terakhir) -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">⚡ CIRCELCUANMV</div>
+          <p class="footer-p">
+            CIRCELCUANMV adalah platform PPOB terdepan yang menyediakan berbagai layanan pembayaran dan pengisian ulang
+            dengan pengalaman pengguna yang unggul.
+          </p>
+
+          <div class="social">
+            <a href="#" aria-label="Facebook"><span class="icon">f</span></a>
+            <a href="#" aria-label="Instagram"><span class="icon">ig</span></a>
+            <a href="#" aria-label="Twitter"><span class="icon">x</span></a>
+            <a href="#" aria-label="LinkedIn"><span class="icon">in</span></a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-h">Layanan Kami</div>
+          <div class="footer-line"></div>
+          <div class="footer-links">
+            <a href="#fitur">Pulsa & Paket Data</a>
+            <a href="#fitur">Token Listrik PLN</a>
+            <a href="#fitur">Topup Game</a>
+            <a href="#fitur">E-Wallet</a>
+            <a href="#fitur">Pembayaran Tagihan</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-h">Bantuan</div>
+          <div class="footer-line"></div>
+          <div class="footer-links">
+            <a href="#">Pusat Bantuan</a>
+            <a href="#">Cara Transaksi</a>
+            <a href="#">Syarat & Ketentuan</a>
+            <a href="#">Kebijakan Privasi</a>
+            <a href="#">Hubungi Kami</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-h">Kontak</div>
+          <div class="footer-line"></div>
+
+          <div class="contact-item"><span>📍</span> <div>Jl.Sidodadi air hitam lampung barat</div></div>
+          <div class="contact-item"><span>📞</span> <div>+62 857 589 422 09</div></div>
+          <div class="contact-item"><span>✉️</span> <div>circelcuanmv@gmail.com</div></div>
+        </div>
+      </div>
+
+      <div class="copyright">
+        © <span id="year"></span> CIRCELCUANMV. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function openDrawer(){ document.body.classList.add("drawer-open"); }
+    function closeDrawer(){ document.body.classList.remove("drawer-open"); }
+
+    // close drawer with ESC
+    window.addEventListener("keydown", (e)=>{
+      if(e.key === "Escape") closeDrawer();
+    });
+
+    // simple reveal on scroll (animasi halus mirip)
+    const items = document.querySelectorAll(".reveal");
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add("show");
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.12});
+    items.forEach(el=>io.observe(el));
+  </script>
+</body>
+        </html>
