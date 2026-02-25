@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Real Icons -->
+  <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -192,7 +192,7 @@
       border-color: rgba(255,255,255,.30);
     }
 
-    /* container untuk gambar (dibatasi biar gak full layar) */
+    /* container untuk gambar */
     .shot{
       border-radius:22px;
       overflow:hidden;
@@ -200,21 +200,65 @@
       background: rgba(255,255,255,.10);
       box-shadow: var(--shadow);
     }
-    .shot img{
+
+    /* ===== HERO SLIDER (kecil, tidak full layar) ===== */
+    .hero .shot{
+      max-width:340px;     /* kecil desktop */
+      margin-left:auto;
+      position:relative;
+    }
+    .hero-slider .slides{
+      display:flex;
       width:100%;
+      transition: transform .5s ease;
+      will-change: transform;
+    }
+    .hero-slider .slides img{
+      min-width:100%;
       height:auto;
       display:block;
       object-fit:contain;
+      max-height:420px;    /* tidak penuh layar */
     }
 
-    /* Batas ukuran hero1 */
-    .hero .shot{
-      max-width:360px;      /* kecil di desktop */
-      margin-left:auto;
+    .slide-btn{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.25);
+      background: rgba(0,0,0,.25);
+      color:#fff;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      backdrop-filter: blur(6px);
     }
-    .hero .shot img{
-      max-height:420px;     /* supaya tidak penuh layar */
+    .slide-btn:hover{ background: rgba(0,0,0,.35); }
+    .slide-btn.prev{ left:10px; }
+    .slide-btn.next{ right:10px; }
+
+    .dots{
+      position:absolute;
+      left:0; right:0;
+      bottom:10px;
+      display:flex;
+      justify-content:center;
+      gap:6px;
     }
+    .dots button{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      border:0;
+      background: rgba(255,255,255,.45);
+      cursor:pointer;
+    }
+    .dots button.active{ background:#fff; }
 
     /* sections */
     section{padding:44px 0}
@@ -238,7 +282,7 @@
       max-width:760px;
     }
 
-    /* ===== LAYANAN CARD PUTIH (MINIMALIS) ===== */
+    /* ===== LAYANAN CARD PUTIH (minimalis) ===== */
     .service-cards{
       margin-top:18px;
       display:grid;
@@ -253,6 +297,7 @@
       box-shadow: 0 12px 28px rgba(0,0,0,.10);
       border:1px solid rgba(0,0,0,.03);
       text-align:center;
+      scroll-margin-top: 90px; /* biar pas diklik tidak ketutup topbar */
     }
     .service-icon{
       width:66px;
@@ -282,6 +327,13 @@
       margin-right:auto;
     }
 
+    /* highlight card (ketika diklik dari footer) */
+    .service-card:target{
+      outline: 3px solid rgba(25,118,210,.28);
+      box-shadow: 0 16px 38px rgba(25,118,210,.18);
+      transform: translateY(-2px);
+    }
+
     /* Download box */
     .download-box{
       margin-top:18px;
@@ -296,13 +348,17 @@
       box-shadow: var(--shadow);
     }
 
-    /* Batas ukuran hero2 */
+    /* Batas ukuran hero2 (download) */
     #download .shot{
-      max-width:320px;  /* kecil */
+      max-width:320px;
       margin-left:auto;
     }
     #download .shot img{
-      max-height:380px; /* supaya tidak penuh layar */
+      width:100%;
+      height:auto;
+      display:block;
+      object-fit:contain;
+      max-height:380px;
     }
 
     /* footer */
@@ -404,9 +460,8 @@
 
       .service-cards{grid-template-columns:1fr}
 
-      /* di HP gambar tetap kecil */
       .hero .shot{max-width:320px;margin:14px auto 0}
-      .hero .shot img{max-height:380px}
+      .hero-slider .slides img{max-height:380px}
 
       #download .shot{max-width:320px;margin:12px auto 0}
       #download .shot img{max-height:360px}
@@ -485,9 +540,22 @@
         </div>
       </div>
 
-      <div class="shot reveal">
-        <img src="./hero1.jpg" alt="Poster CIRCELCUANMV">
+      <!-- HERO SLIDER (gunakan gambar kakak) -->
+      <div class="shot reveal hero-slider" aria-label="Slider Hero">
+        <div class="slides" id="heroSlides">
+          <!-- GANTI NAMA FILE kalau beda -->
+          <img src="./hero1.jpg" alt="Hero 1">
+          <img src="./hero3.jpg" alt="Hero 2">
+          <img src="./hero4.jpg" alt="Hero 3">
+          <img src="./hero5.jpg" alt="Hero 4">
+        </div>
+
+        <button class="slide-btn prev" type="button" aria-label="Sebelumnya" onclick="prevSlide(true)">‹</button>
+        <button class="slide-btn next" type="button" aria-label="Berikutnya" onclick="nextSlide(true)">›</button>
+
+        <div class="dots" id="heroDots" aria-label="Indikator slide"></div>
       </div>
+
     </div>
   </header>
 
@@ -514,41 +582,43 @@
         <p class="desc">Semua layanan dibuat simpel, cepat, dan nyaman untuk transaksi harian.</p>
 
         <div class="service-cards">
-          <div class="service-card reveal">
+
+          <div id="pulsa" class="service-card reveal">
             <div class="service-icon"><i class="fa-solid fa-mobile-screen"></i></div>
             <h3>Pulsa & Paket Data</h3>
             <p>Isi pulsa semua operator dan beli paket data dengan harga spesial. Proses instan tanpa ribet.</p>
           </div>
 
-          <div class="service-card reveal">
+          <div id="token" class="service-card reveal">
             <div class="service-icon"><i class="fa-solid fa-lightbulb"></i></div>
             <h3>Token Listrik</h3>
             <p>Bayar tagihan listrik dan beli token PLN pra-bayar dengan mudah kapan saja.</p>
           </div>
 
-          <div class="service-card reveal">
+          <div id="game" class="service-card reveal">
             <div class="service-icon"><i class="fa-solid fa-gamepad"></i></div>
             <h3>Topup Game</h3>
             <p>Topup game favorit lebih cepat, aman, dan praktis langsung dari aplikasi.</p>
           </div>
 
-          <div class="service-card reveal">
+          <div id="ewallet" class="service-card reveal">
             <div class="service-icon"><i class="fa-solid fa-wallet"></i></div>
             <h3>E-Wallet</h3>
             <p>Isi saldo e-wallet dengan cepat untuk kebutuhan transaksi online dan offline.</p>
           </div>
 
-          <div class="service-card reveal">
+          <div id="tagihan" class="service-card reveal">
             <div class="service-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
             <h3>Pembayaran Tagihan</h3>
             <p>Bayar tagihan bulanan seperti PDAM, listrik, dan lainnya dengan praktis.</p>
           </div>
 
-          <div class="service-card reveal">
+          <div id="bantuan" class="service-card reveal">
             <div class="service-icon"><i class="fa-solid fa-headset"></i></div>
             <h3>Bantuan</h3>
             <p>Dukungan bantuan untuk memudahkan penggunaan dan memastikan transaksi tetap lancar.</p>
           </div>
+
         </div>
 
       </div>
@@ -577,7 +647,7 @@
           </div>
 
           <div class="shot">
-            <img src="./hero2.jpg" alt="Screenshot aplikasi CIRCELCUANMV">
+            <img src="./hero2.jpg" alt="Poster download CIRCELCUANMV">
           </div>
         </div>
       </div>
@@ -609,11 +679,12 @@
           <div class="footer-h">Layanan Kami</div>
           <div class="footer-line"></div>
           <div class="footer-links">
-            <a href="#layanan">Pulsa & Paket Data</a>
-            <a href="#layanan">Token Listrik PLN</a>
-            <a href="#layanan">Topup Game</a>
-            <a href="#layanan">E-Wallet</a>
-            <a href="#layanan">Pembayaran Tagihan</a>
+            <!-- langsung menuju card sesuai -->
+            <a href="#pulsa">Pulsa & Paket Data</a>
+            <a href="#token">Token Listrik PLN</a>
+            <a href="#game">Topup Game</a>
+            <a href="#ewallet">E-Wallet</a>
+            <a href="#tagihan">Pembayaran Tagihan</a>
           </div>
         </div>
 
@@ -621,12 +692,12 @@
           <div class="footer-h">Bantuan</div>
           <div class="footer-line"></div>
           <div class="footer-links">
-          <a href="pusat-bantuan.html">Pusat Bantuan</a>
-          <a href="cara-transaksi.html">Cara Transaksi</a>
-          <a href="syarat-ketentuan.html">Syarat & Ketentuan</a>
-          <a href="kebijakan-privasi.html">Kebijakan Privasi</a>
-          <a href="hubungi-kami.html">Hubungi Kami</a>
-</div>
+            <a href="pusat-bantuan.html">Pusat Bantuan</a>
+            <a href="cara-transaksi.html">Cara Transaksi</a>
+            <a href="syarat-ketentuan.html">Syarat & Ketentuan</a>
+            <a href="kebijakan-privasi.html">Kebijakan Privasi</a>
+            <a href="hubungi-kami.html">Hubungi Kami</a>
+          </div>
         </div>
 
         <div>
@@ -675,6 +746,88 @@
       });
     }, {threshold: 0.12});
     items.forEach(el=>io.observe(el));
+
+    // ===== HERO SLIDER AUTOPLAY + SWIPE =====
+    let currentSlide = 0;
+    let slideTimer = null;
+
+    function setupHeroSlider(){
+      const slides = document.getElementById("heroSlides");
+      const dotsWrap = document.getElementById("heroDots");
+      if(!slides || !dotsWrap) return;
+
+      const imgs = slides.querySelectorAll("img");
+      const total = imgs.length;
+      if(total <= 1) return;
+
+      dotsWrap.innerHTML = "";
+      imgs.forEach((_, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.setAttribute("aria-label", "Slide " + (i+1));
+        b.addEventListener("click", () => goToSlide(i, true));
+        dotsWrap.appendChild(b);
+      });
+
+      goToSlide(0, false);
+      startAutoplay();
+
+      const sliderBox = slides.parentElement;
+      sliderBox.addEventListener("mouseenter", stopAutoplay);
+      sliderBox.addEventListener("mouseleave", startAutoplay);
+
+      // Swipe mobile
+      let startX = 0;
+      let isDown = false;
+
+      sliderBox.addEventListener("touchstart", (e)=>{
+        stopAutoplay();
+        isDown = true;
+        startX = e.touches[0].clientX;
+      }, {passive:true});
+
+      sliderBox.addEventListener("touchend", (e)=>{
+        if(!isDown) return;
+        isDown = false;
+        const endX = e.changedTouches[0].clientX;
+        const diff = endX - startX;
+        if(Math.abs(diff) > 40){
+          diff < 0 ? nextSlide(true) : prevSlide(true);
+        }
+        startAutoplay();
+      }, {passive:true});
+    }
+
+    function goToSlide(index, userAction=false){
+      const slides = document.getElementById("heroSlides");
+      const dotsWrap = document.getElementById("heroDots");
+      if(!slides || !dotsWrap) return;
+
+      const total = slides.querySelectorAll("img").length;
+      currentSlide = (index + total) % total;
+
+      slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+      const dots = dotsWrap.querySelectorAll("button");
+      dots.forEach((d,i)=> d.classList.toggle("active", i === currentSlide));
+
+      if(userAction) restartAutoplay();
+    }
+
+    function nextSlide(userAction=false){ goToSlide(currentSlide + 1, userAction); }
+    function prevSlide(userAction=false){ goToSlide(currentSlide - 1, userAction); }
+
+    function startAutoplay(){
+      stopAutoplay();
+      slideTimer = setInterval(()=> nextSlide(false), 3000);
+    }
+    function stopAutoplay(){
+      if(slideTimer) clearInterval(slideTimer);
+      slideTimer = null;
+    }
+    function restartAutoplay(){ startAutoplay(); }
+
+    window.addEventListener("load", setupHeroSlider);
   </script>
 </body>
 </html>
