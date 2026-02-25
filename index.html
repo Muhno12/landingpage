@@ -1,474 +1,229 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CIRCELCUANMV - Solusi PPOB</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
     :root{
       --primary:#1976D2;
-      --bg1:#1976D2;
-      --bg2:#1976D2;
-      --dark:#1f232a;
-      --dark2:#1b1f26;
-      --text:#ffffff;
+      --bg:#1976D2;
+      --text:#fff;
       --muted:rgba(255,255,255,.78);
       --shadow:0 16px 40px rgba(0,0,0,.18);
+      --softBorder:rgba(255,255,255,.08);
+      --glass:rgba(255,255,255,.06);
     }
-
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
       margin:0;
-      font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
-      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      background:linear-gradient(135deg,var(--bg),var(--bg));
       overflow-x:hidden;
     }
     a{color:inherit;text-decoration:none}
     .container{max-width:1100px;margin:0 auto;padding:0 18px}
 
-    /* pattern */
+    /* bg pattern */
     .pattern{
-      position:fixed; inset:0;
-      pointer-events:none; z-index:-1;
-      opacity:.32;
+      position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.32;
       background:
         radial-gradient(circle at 10% 20%, rgba(255,255,255,.10) 0 2px, transparent 3px) 0 0/56px 56px,
         radial-gradient(circle at 85% 30%, rgba(255,255,255,.06) 0 2px, transparent 3px) 0 0/70px 70px,
         linear-gradient(135deg, rgba(0,0,0,.02), rgba(0,0,0,.06));
     }
 
-    /* Topbar */
+    /* topbar */
     .topbar{
-      position:sticky; top:0; z-index:50;
-      height:64px;
-      background: rgba(25,119,210,.98);
-      backdrop-filter: blur(10px);
+      position:sticky;top:0;z-index:50;height:64px;
+      background:rgba(25,119,210,.98);
+      backdrop-filter:blur(10px);
       border-bottom:1px solid rgba(255,255,255,.12);
     }
-    .topbar-inner{
-      height:64px;
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-    }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight:800; font-size:22px;
-      letter-spacing:.2px;
-    }
-    .logo-img{
-      width:34px;height:34px;
-      object-fit:contain;
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,.22));
-    }
-
-    .navlinks{
-      display:flex; gap:14px;
-      font-weight:600;
-      color:rgba(255,255,255,.92);
-    }
-    .navlinks a{padding:10px 12px; border-radius:14px}
-    .navlinks a:hover{background: rgba(255,255,255,.12)}
-
-    /* burger */
+    .topbar-inner{height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px}
+    .logo{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,0,0,.22))}
+    .nav{display:flex;gap:14px;font-weight:600;color:rgba(255,255,255,.92)}
+    .nav a{padding:10px 12px;border-radius:14px}
+    .nav a:hover{background:rgba(255,255,255,.12)}
     .burger{
-      width:46px;height:46px;border-radius:14px;
-      display:none; align-items:center; justify-content:center;
-      cursor:pointer;
-      background: rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.14);
+      width:46px;height:46px;border-radius:14px;display:none;
+      align-items:center;justify-content:center;cursor:pointer;
+      background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);
     }
-    .burger span{
-      display:block;
-      width:22px; height:2px; border-radius:10px;
-      background: rgba(255,255,255,.95);
-      position:relative;
+    .burger span{width:22px;height:2px;border-radius:10px;background:rgba(255,255,255,.95);position:relative;display:block}
+    .burger span:before,.burger span:after{
+      content:"";position:absolute;left:0;right:0;height:2px;border-radius:10px;background:rgba(255,255,255,.95)
     }
-    .burger span::before,
-    .burger span::after{
-      content:"";
-      position:absolute; left:0; right:0;
-      height:2px; border-radius:10px;
-      background: rgba(255,255,255,.95);
-    }
-    .burger span::before{top:-7px}
-    .burger span::after{top:7px}
+    .burger span:before{top:-7px}
+    .burger span:after{top:7px}
 
     /* drawer */
     .overlay{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.35);
-      opacity:0; pointer-events:none;
-      transition:opacity .22s ease;
-      z-index:60;
+      position:fixed;inset:0;background:rgba(0,0,0,.35);
+      opacity:0;pointer-events:none;transition:.22s;z-index:60;
     }
     .drawer{
-      position:fixed; top:0; left:-340px;
-      width:340px; max-width:86vw;
-      height:100vh;
-      background: rgba(25,119,210,.98);
+      position:fixed;top:0;left:-340px;width:340px;max-width:86vw;height:100vh;
+      background:rgba(25,119,210,.98);
       border-right:1px solid rgba(255,255,255,.12);
-      box-shadow: 20px 0 50px rgba(0,0,0,.25);
-      transition:left .25s ease;
-      z-index:70;
-      padding:16px 18px;
+      box-shadow:20px 0 50px rgba(0,0,0,.25);
+      transition:.25s;z-index:70;padding:16px 18px;
     }
-    .drawer-head{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:6px 0 10px;
-    }
-    .drawer-title{
-      display:flex; align-items:center; gap:10px;
-      font-weight:800; font-size:20px;
-    }
+    .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:6px 0 10px}
+    .drawer-title{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
     .drawer-close{
-      width:44px;height:44px;border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.10);
-      display:flex; align-items:center; justify-content:center;
-      font-size:24px; cursor:pointer;
+      width:44px;height:44px;border-radius:14px;cursor:pointer;
+      border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.10);
+      display:flex;align-items:center;justify-content:center;font-size:24px;
     }
-    .drawer-links{
-      margin-top:18px;
-      display:flex; flex-direction:column;
-      gap:18px;
-      font-weight:600;
-      font-size:18px;
-    }
+    .drawer-links{margin-top:18px;display:flex;flex-direction:column;gap:18px;font-weight:600;font-size:18px}
     .drawer-links a{padding:10px 6px}
-
-    body.drawer-open .overlay{opacity:1; pointer-events:auto}
+    body.drawer-open .overlay{opacity:1;pointer-events:auto}
     body.drawer-open .drawer{left:0}
 
-    /* HERO */
-    header.hero{padding:34px 0 18px}
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap:18px;
-      align-items:start;
-    }
-    .hero h1{
-      margin:0 0 10px;
-      font-size:36px;
-      letter-spacing:-.6px;
-      line-height:1.1;
-    }
-    .hero p{
-      margin:0 0 16px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.8;
-    }
-
-    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:10px}
+    /* buttons */
+    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
     .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:12px 16px;
-      border-radius:16px;
-      font-weight:800;
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:12px 16px;border-radius:16px;font-weight:800;
       border:1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.12);
+      background:rgba(255,255,255,.12);
       color:rgba(255,255,255,.95);
-      box-shadow: var(--shadow);
-      transition: transform .12s ease, background .12s ease;
+      box-shadow:var(--shadow);
+      transition:transform .12s ease;
     }
-    .btn:hover{transform: translateY(-1px)}
-    .btn-primary{
-      background: rgba(255,255,255,.95);
-      color:#222;
-      border-color: rgba(255,255,255,.30);
-    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{background:rgba(255,255,255,.95);color:#222;border-color:rgba(255,255,255,.30)}
 
-    /* ===== HERO SLIDER (NYATU / POLOS) ===== */
-    .shot{
-      position:relative;
-      border-radius:26px;
-      overflow:hidden;
+    /* hero */
+    header.hero{padding:34px 0 18px}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start}
+    .hero h1{margin:0 0 10px;font-size:36px;letter-spacing:-.6px;line-height:1.1}
+    .hero p{margin:0 0 16px;color:var(--muted);font-size:15px;line-height:1.8}
 
-      /* NYATU: hilangkan card */
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      backdrop-filter: none;
-
-      /* kalau mau “garis tipis banget”, aktifkan ini (hapus 4 baris di atas):
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: 0 10px 28px rgba(0,0,0,.12);
-      backdrop-filter: blur(6px);
-      */
-    }
-
-    .hero .shot{
-      max-width:300px;
-      margin-left:auto;
-    }
-
+    /* ===== SLIDER RAPiH (ujung halus, ga lancip) ===== */
     .hero-slider{
-      padding:0; /* biar makin nyatu */
+      max-width:300px;margin-left:auto;position:relative;
     }
-
-    .hero-slider .slides{
-      display:flex;
-      transition: transform .6s cubic-bezier(.4,0,.2,1);
-      will-change: transform;
+    .frame{
+      border-radius:26px;
+      padding:10px;                 /* ruang biar poster gak nempel */
+      background:rgba(255,255,255,.04);   /* tipis banget nyatu */
+      border:1px solid var(--softBorder);
+      box-shadow:0 14px 34px rgba(0,0,0,.14);
+      backdrop-filter:blur(6px);
     }
-
-    .hero-slider .slides img{
-      min-width:100%;
-      display:block;
-
-      /* biar nyatu tapi tetap halus */
+    .viewport{
       border-radius:22px;
-
+      overflow:hidden;
+      background:transparent;
+    }
+    .slides{display:flex;transition:transform .6s cubic-bezier(.4,0,.2,1);will-change:transform}
+    .slides img{
+      min-width:100%;
       width:100%;
       height:auto;
+      display:block;
       object-fit:contain;
-
       max-height:360px;
 
+      /* bikin ujung gambar halus */
+      border-radius:22px;
+      background:transparent;
       user-select:none;
       -webkit-user-drag:none;
-
-      /* penting: jangan kasih background kotak */
-      background: transparent;
     }
-
-    /* dots */
     .dots{
-      position:absolute;
-      left:0; right:0;
-      bottom:10px;
-      display:flex;
-      justify-content:center;
-      gap:6px;
-      padding:0 10px;
-      pointer-events:auto;
+      position:absolute;left:0;right:0;bottom:10px;
+      display:flex;justify-content:center;gap:6px;padding:0 10px;
     }
     .dots button{
-      width:7px;height:7px;
-      border-radius:999px;
-      border:0;
-      background: rgba(255,255,255,.35);
-      cursor:pointer;
-      transition:.25s;
+      width:7px;height:7px;border-radius:999px;border:0;
+      background:rgba(255,255,255,.35);cursor:pointer;transition:.25s;
     }
-    .dots button.active{
-      width:18px;
-      background:#fff;
-    }
+    .dots button.active{width:18px;background:#fff}
 
     /* sections */
     section{padding:44px 0}
-    .title{
-      font-size:28px;
-      margin:0 0 10px;
-      letter-spacing:-.3px;
-    }
-    .underline{
-      width:54px; height:4px;
-      background: rgba(255,255,255,.75);
-      border-radius:999px;
-      margin:10px 0 16px;
-      opacity:.55;
-    }
-    .desc{
-      margin:0;
-      color:var(--muted);
-      line-height:1.85;
-      font-size:15px;
-      max-width:760px;
-    }
+    .title{font-size:28px;margin:0 0 10px;letter-spacing:-.3px}
+    .underline{width:54px;height:4px;background:rgba(255,255,255,.75);border-radius:999px;margin:10px 0 16px;opacity:.55}
+    .desc{margin:0;color:var(--muted);line-height:1.85;font-size:15px;max-width:760px}
 
-    /* ===== LAYANAN CARD PUTIH ===== */
-    .service-cards{
-      margin-top:18px;
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:14px;
-    }
+    /* services */
+    .service-cards{margin-top:18px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
     .service-card{
-      background: rgba(255,255,255,.98);
-      color:#1c2330;
-      border-radius:22px;
-      padding:18px 16px;
-      box-shadow: 0 12px 28px rgba(0,0,0,.10);
-      border:1px solid rgba(0,0,0,.03);
-      text-align:center;
-      scroll-margin-top: 88px;
+      background:rgba(255,255,255,.98);color:#1c2330;border-radius:22px;
+      padding:18px 16px;box-shadow:0 12px 28px rgba(0,0,0,.10);
+      border:1px solid rgba(0,0,0,.03);text-align:center;scroll-margin-top:88px;
     }
     .service-icon{
-      width:66px;height:66px;
-      border-radius:999px;
-      margin:0 auto 10px;
+      width:66px;height:66px;border-radius:999px;margin:0 auto 10px;
       display:flex;align-items:center;justify-content:center;
-      background: rgba(25,119,210,.12);
-      color: var(--primary);
-      font-size:26px;
+      background:rgba(25,119,210,.12);color:var(--primary);font-size:26px;
     }
-    .service-card h3{
-      margin:0 0 8px;
-      font-size:20px;
-      font-weight:800;
-      letter-spacing:-.2px;
-    }
-    .service-card p{
-      margin:0;
-      color: rgba(28,35,48,.62);
-      font-size:14px;
-      line-height:1.85;
-      max-width:520px;
-      margin-left:auto;margin-right:auto;
-    }
+    .service-card h3{margin:0 0 8px;font-size:20px;font-weight:800}
+    .service-card p{margin:0;color:rgba(28,35,48,.62);font-size:14px;line-height:1.85}
 
-    /* Download box */
+    /* download */
     .download-box{
-      margin-top:18px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:16px;
-      align-items:center;
-      background: rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius: 22px;
-      padding:16px;
-      box-shadow: var(--shadow);
+      margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;
+      background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.14);
+      border-radius:22px;padding:16px;box-shadow:var(--shadow);
     }
-    #download .shot{
-      max-width:320px;
-      margin-left:auto;
-    }
-    #download .shot img{
-      width:100%;
-      height:auto;
-      display:block;
-      max-height:360px;
-      object-fit:contain;
-    }
+    .download-shot{max-width:320px;margin-left:auto}
+    .download-shot img{width:100%;height:auto;display:block;max-height:360px;object-fit:contain;border-radius:22px}
 
     /* footer */
     footer{
-      margin-top:18px;
-      background: linear-gradient(180deg, #1f232a, #1b1f26);
-      border-top:1px solid rgba(255,255,255,.08);
-      padding:42px 0 24px;
+      margin-top:18px;background:linear-gradient(180deg,#1f232a,#1b1f26);
+      border-top:1px solid rgba(255,255,255,.08);padding:42px 0 24px;
     }
-    .footer-grid{
-      display:grid;
-      grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
-      gap:22px;
-    }
-    .footer-title{
-      font-size:22px;
-      margin:0 0 8px;
-      font-weight:800;
-      display:flex; align-items:center; gap:10px;
-    }
-    .footer-h{
-      margin:0 0 12px;
-      font-size:20px;
-      font-weight:800;
-    }
-    .footer-line{
-      width:46px; height:3px;
-      background: rgba(63,99,233,.95);
-      border-radius:999px;
-      margin-bottom:14px;
-    }
-    .footer-p{
-      margin:0 0 14px;
-      color: rgba(255,255,255,.72);
-      line-height:1.85;
-      font-size:14px;
-    }
-    .footer-links a{
-      display:block;
-      padding:10px 0;
-      color: rgba(255,255,255,.72);
-      font-size:14px;
-    }
+    .footer-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr 1.2fr;gap:22px}
+    .footer-title{font-size:22px;margin:0 0 8px;font-weight:800;display:flex;align-items:center;gap:10px}
+    .footer-h{margin:0 0 12px;font-size:20px;font-weight:800}
+    .footer-line{width:46px;height:3px;background:rgba(63,99,233,.95);border-radius:999px;margin-bottom:14px}
+    .footer-p{margin:0 0 14px;color:rgba(255,255,255,.72);line-height:1.85;font-size:14px}
+    .footer-links a{display:block;padding:10px 0;color:rgba(255,255,255,.72);font-size:14px}
     .footer-links a:hover{color:#fff}
-
-    .social{display:flex; gap:10px; margin-top:12px}
+    .social{display:flex;gap:10px;margin-top:12px}
     .social a{
-      width:42px;height:42px;border-radius:999px;
-      display:flex;align-items:center;justify-content:center;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      transition: transform .14s ease, background .14s ease;
+      width:42px;height:42px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);
+      transition:transform .14s ease,background .14s ease;
     }
-    .social a:hover{transform: translateY(-2px); background: rgba(255,255,255,.12)}
-
-    .contact-item{
-      display:flex; gap:10px; align-items:flex-start;
-      margin:12px 0;
-      color: rgba(255,255,255,.72);
-      font-size:14px;
-      line-height:1.7;
-    }
-    .contact-item span{
-      width:18px;
-      display:inline-flex;
-      justify-content:center;
-      opacity:.9;
-      margin-top:2px;
-    }
-
+    .social a:hover{transform:translateY(-2px);background:rgba(255,255,255,.12)}
+    .contact-item{display:flex;gap:10px;align-items:flex-start;margin:12px 0;color:rgba(255,255,255,.72);font-size:14px;line-height:1.7}
+    .contact-item span{width:18px;display:inline-flex;justify-content:center;opacity:.9;margin-top:2px}
     .copyright{
-      margin-top:22px;
-      padding-top:18px;
-      border-top:1px solid rgba(255,255,255,.08);
-      text-align:center;
-      color: rgba(255,255,255,.55);
-      font-size:13px;
+      margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);
+      text-align:center;color:rgba(255,255,255,.55);font-size:13px;
     }
 
     /* reveal */
-    .reveal{
-      opacity:0;
-      transform: translateY(14px);
-      transition: opacity .45s ease, transform .45s ease;
-    }
-    .reveal.show{
-      opacity:1;
-      transform: translateY(0);
-    }
+    .reveal{opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease}
+    .reveal.show{opacity:1;transform:translateY(0)}
 
     /* responsive */
-    @media (max-width: 900px){
+    @media (max-width:900px){
       .hero-grid{grid-template-columns:1fr}
       .download-box{grid-template-columns:1fr}
       .footer-grid{grid-template-columns:1fr}
-      .footer-h{font-size:22px}
       .service-cards{grid-template-columns:1fr}
-
-      .hero .shot{
-        max-width:340px;
-        margin:14px auto 0;
-      }
-      .hero-slider .slides img{
-        max-height:420px;
-      }
-
-      #download .shot{
-        max-width:340px;
-        margin:12px auto 0;
-      }
-      #download .shot img{max-height:360px}
+      .hero-slider{max-width:340px;margin:14px auto 0}
+      .slides img{max-height:420px}
+      .download-shot{max-width:340px;margin:12px auto 0}
     }
-    @media (max-width: 760px){
-      .navlinks{display:none}
+    @media (max-width:760px){
+      .nav{display:none}
       .burger{display:flex}
       .hero h1{font-size:32px}
     }
@@ -483,12 +238,11 @@
   <aside class="drawer" aria-label="Menu">
     <div class="drawer-head">
       <div class="drawer-title">
-        <img class="logo-img" src="https://buyer.duniadigitalsb.my.id/uploads/logo/circelcuanmvlogo.png" alt="Logo">
+        <img class="logo" src="https://buyer.duniadigitalsb.my.id/uploads/logo/circelcuanmvlogo.png" alt="Logo">
         CIRCELCUANMV
       </div>
       <div class="drawer-close" onclick="closeDrawer()" aria-label="Tutup">×</div>
     </div>
-
     <nav class="drawer-links">
       <a href="#home" onclick="closeDrawer()">Home</a>
       <a href="#tentang" onclick="closeDrawer()">Tentang Kami</a>
@@ -502,11 +256,11 @@
   <div class="topbar">
     <div class="container topbar-inner">
       <a class="brand" href="#home" aria-label="CIRCELCUANMV">
-        <img class="logo-img" src="https://buyer.duniadigitalsb.my.id/uploads/logo/circelcuanmvlogo.png" alt="Logo CIRCELCUANMV">
+        <img class="logo" src="https://buyer.duniadigitalsb.my.id/uploads/logo/circelcuanmvlogo.png" alt="Logo">
         <span>CIRCELCUANMV</span>
       </a>
 
-      <nav class="navlinks">
+      <nav class="nav">
         <a href="#home">Home</a>
         <a href="#tentang">Tentang Kami</a>
         <a href="#layanan">Layanan</a>
@@ -514,9 +268,7 @@
         <a href="#kontak">Kontak</a>
       </nav>
 
-      <div class="burger" onclick="openDrawer()" aria-label="Buka menu">
-        <span></span>
-      </div>
+      <div class="burger" onclick="openDrawer()" aria-label="Buka menu"><span></span></div>
     </div>
   </div>
 
@@ -532,22 +284,24 @@
         </p>
 
         <div class="cta">
-          <a class="btn btn-primary"
-             href="https://play.google.com/store/apps/details?id=com.circelcuanmv"
-             target="_blank" rel="noopener">
+          <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.circelcuanmv" target="_blank" rel="noopener">
             Download Sekarang
           </a>
           <a class="btn" href="#layanan">Lihat Layanan</a>
         </div>
       </div>
 
-      <!-- HERO SLIDER -->
-      <div class="shot reveal hero-slider" id="heroSlider">
-        <div class="slides" id="heroSlides">
-          <img src="./hero1.jpg" alt="Hero 1">
-          <img src="./hero2.jpg" alt="Hero 2">
-          <img src="./hero3.jpg" alt="Hero 3">
-          <img src="./hero4.jpg" alt="Hero 4">
+      <!-- Slider -->
+      <div class="hero-slider reveal" id="heroSlider">
+        <div class="frame">
+          <div class="viewport">
+            <div class="slides" id="heroSlides">
+              <img src="./hero1.jpg" alt="Hero 1">
+              <img src="./hero2.jpg" alt="Hero 2">
+              <img src="./hero3.jpg" alt="Hero 3">
+              <img src="./hero4.jpg" alt="Hero 4">
+            </div>
+          </div>
         </div>
         <div class="dots" id="heroDots"></div>
       </div>
@@ -613,7 +367,6 @@
             <p>Dukungan bantuan untuk memudahkan penggunaan dan memastikan transaksi tetap lancar.</p>
           </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -628,19 +381,16 @@
 
         <div class="download-box reveal">
           <div>
-            <a class="btn btn-primary"
-               href="https://play.google.com/store/apps/details?id=com.circelcuanmv"
-               target="_blank" rel="noopener">
-              <i class="fa-brands fa-google-play" style="margin-right:10px"></i>
-              Download di Google Play
+            <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.circelcuanmv" target="_blank" rel="noopener">
+              <i class="fa-brands fa-google-play" style="margin-right:10px"></i>Download di Google Play
             </a>
-            <p style="margin:12px 0 0; color:var(--muted); font-size:14px; line-height:1.8">
+            <p style="margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.8">
               Unduh aplikasi CIRCELCUANMV dan nikmati kemudahan transaksi dari mana saja.
             </p>
           </div>
 
-          <div class="shot">
-            <img src="./hero2.jpg" alt="Screenshot aplikasi CIRCELCUANMV">
+          <div class="download-shot">
+            <img src="./hero2.jpg" alt="Poster download CIRCELCUANMV">
           </div>
         </div>
       </div>
@@ -653,7 +403,7 @@
       <div class="footer-grid">
         <div>
           <div class="footer-title">
-            <img class="logo-img" src="https://buyer.duniadigitalsb.my.id/uploads/logo/circelcuanmvlogo.png" alt="Logo">
+            <img class="logo" src="https://buyer.duniadigitalsb.my.id/uploads/logo/circelcuanmvlogo.png" alt="Logo">
             CIRCELCUANMV
           </div>
           <p class="footer-p">
@@ -696,109 +446,74 @@
           <div class="footer-h">Kontak</div>
           <div class="footer-line"></div>
 
-          <div class="contact-item">
-            <span><i class="fa-solid fa-location-dot"></i></span>
-            <div>Jl.Sidodadi air hitam lampung barat</div>
-          </div>
-          <div class="contact-item">
-            <span><i class="fa-solid fa-phone"></i></span>
-            <div>+62 857 589 422 09</div>
-          </div>
-          <div class="contact-item">
-            <span><i class="fa-solid fa-envelope"></i></span>
-            <div>circelcuanmv@gmail.com</div>
-          </div>
+          <div class="contact-item"><span><i class="fa-solid fa-location-dot"></i></span><div>Jl.Sidodadi air hitam lampung barat</div></div>
+          <div class="contact-item"><span><i class="fa-solid fa-phone"></i></span><div>+62 857 589 422 09</div></div>
+          <div class="contact-item"><span><i class="fa-solid fa-envelope"></i></span><div>circelcuanmv@gmail.com</div></div>
         </div>
       </div>
 
-      <div class="copyright">
-        © <span id="year"></span> CIRCELCUANMV. All Rights Reserved.
-      </div>
+      <div class="copyright">© <span id="year"></span> CIRCELCUANMV. All Rights Reserved.</div>
     </div>
   </footer>
 
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    const $ = (q)=>document.querySelector(q);
+    const $$ = (q)=>document.querySelectorAll(q);
 
-    function openDrawer(){ document.body.classList.add("drawer-open"); }
-    function closeDrawer(){ document.body.classList.remove("drawer-open"); }
-    window.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeDrawer(); });
+    $("#year").textContent = new Date().getFullYear();
+    window.openDrawer = ()=>document.body.classList.add("drawer-open");
+    window.closeDrawer = ()=>document.body.classList.remove("drawer-open");
+    window.addEventListener("keydown",(e)=>{ if(e.key==="Escape") closeDrawer(); });
 
-    // reveal animation
-    const items = document.querySelectorAll(".reveal");
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          entry.target.classList.add("show");
-          io.unobserve(entry.target);
-        }
+    // reveal
+    const io = new IntersectionObserver((ents)=>{
+      ents.forEach(en=>{
+        if(en.isIntersecting){ en.target.classList.add("show"); io.unobserve(en.target); }
       });
-    }, {threshold: 0.12});
-    items.forEach(el=>io.observe(el));
+    },{threshold:.12});
+    $$(".reveal").forEach(el=>io.observe(el));
 
-    // ===== HERO SLIDER (AUTO + DOTS + SWIPE) =====
-    const slider = document.getElementById("heroSlider");
-    const slidesEl = document.getElementById("heroSlides");
-    const images = slidesEl.querySelectorAll("img");
-    const dotsEl = document.getElementById("heroDots");
-
-    let index = 0;
-    let timer = null;
+    // slider
+    const slider = $("#heroSlider");
+    const slidesEl = $("#heroSlides");
+    const imgs = slidesEl.querySelectorAll("img");
+    const dotsEl = $("#heroDots");
+    let idx = 0, t=null, startX=0, dx=0;
 
     function renderDots(){
-      dotsEl.innerHTML = "";
-      images.forEach((_, i)=>{
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = i === index ? "active" : "";
-        b.addEventListener("click", ()=> goTo(i, true));
+      dotsEl.innerHTML="";
+      imgs.forEach((_,i)=>{
+        const b=document.createElement("button");
+        b.type="button";
+        b.className=i===idx?"active":"";
+        b.onclick=()=>go(i,true);
         dotsEl.appendChild(b);
       });
     }
-
-    function goTo(i, user=false){
-      index = (i + images.length) % images.length;
-      slidesEl.style.transform = `translateX(${-index * 100}%)`;
-      [...dotsEl.children].forEach((d, di)=> d.classList.toggle("active", di === index));
-      if(user) restartAuto();
+    function go(i,user=false){
+      idx=(i+imgs.length)%imgs.length;
+      slidesEl.style.transform=`translateX(${-idx*100}%)`;
+      [...dotsEl.children].forEach((d,di)=>d.classList.toggle("active",di===idx));
+      if(user) restart();
     }
+    function next(){ go(idx+1); }
+    function start(){ t=setInterval(next,3200); }
+    function stop(){ if(t) clearInterval(t); t=null; }
+    function restart(){ stop(); start(); }
 
-    function next(){ goTo(index + 1); }
+    renderDots(); go(0); start();
 
-    function startAuto(){ timer = setInterval(next, 3200); }
-    function stopAuto(){ if(timer) clearInterval(timer); timer = null; }
-    function restartAuto(){ stopAuto(); startAuto(); }
+    slider.addEventListener("mouseenter",stop);
+    slider.addEventListener("mouseleave",start);
+    slider.addEventListener("touchstart",()=>stop(),{passive:true});
+    slider.addEventListener("touchend",()=>start(),{passive:true});
 
-    // init
-    renderDots();
-    goTo(0);
-    startAuto();
-
-    // pause on touch/hover
-    slider.addEventListener("mouseenter", stopAuto);
-    slider.addEventListener("mouseleave", startAuto);
-    slider.addEventListener("touchstart", stopAuto, {passive:true});
-    slider.addEventListener("touchend", startAuto, {passive:true});
-
-    // swipe
-    let startX = 0;
-    let dx = 0;
-    slider.addEventListener("touchstart", (e)=>{
-      startX = e.touches[0].clientX;
-      dx = 0;
-    }, {passive:true});
-
-    slider.addEventListener("touchmove", (e)=>{
-      dx = e.touches[0].clientX - startX;
-    }, {passive:true});
-
-    slider.addEventListener("touchend", ()=>{
-      if(Math.abs(dx) > 40){
-        if(dx < 0) goTo(index + 1, true);
-        else goTo(index - 1, true);
-      }
-      dx = 0;
-    }, {passive:true});
+    slider.addEventListener("touchstart",(e)=>{ startX=e.touches[0].clientX; dx=0; },{passive:true});
+    slider.addEventListener("touchmove",(e)=>{ dx=e.touches[0].clientX-startX; },{passive:true});
+    slider.addEventListener("touchend",()=>{
+      if(Math.abs(dx)>40){ dx<0 ? go(idx+1,true) : go(idx-1,true); }
+      dx=0;
+    },{passive:true});
   </script>
 </body>
 </html>
