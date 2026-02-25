@@ -17,8 +17,6 @@
       --text:#fff;
       --muted:rgba(255,255,255,.78);
       --shadow:0 16px 40px rgba(0,0,0,.18);
-      --softBorder:rgba(255,255,255,.08);
-      --glass:rgba(255,255,255,.06);
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -110,24 +108,22 @@
     .hero h1{margin:0 0 10px;font-size:36px;letter-spacing:-.6px;line-height:1.1}
     .hero p{margin:0 0 16px;color:var(--muted);font-size:15px;line-height:1.8}
 
-    /* ===== SLIDER RAPiH (ujung halus, ga lancip) ===== */
+    /* ===== SLIDER POLOS (TANPA CARD) ===== */
     .hero-slider{
-      max-width:300px;margin-left:auto;position:relative;
-    }
-    .frame{
-      border-radius:26px;
-      padding:10px;                 /* ruang biar poster gak nempel */
-      background:rgba(255,255,255,.04);   /* tipis banget nyatu */
-      border:1px solid var(--softBorder);
-      box-shadow:0 14px 34px rgba(0,0,0,.14);
-      backdrop-filter:blur(6px);
+      max-width:300px;
+      margin-left:auto;
+      position:relative;
     }
     .viewport{
-      border-radius:22px;
-      overflow:hidden;
-      background:transparent;
+      overflow:hidden;        /* supaya geser slide rapi */
+      border-radius:28px;     /* ini buat “feel” halus */
+      background:transparent; /* biar nyatu, ga ada kotak */
     }
-    .slides{display:flex;transition:transform .6s cubic-bezier(.4,0,.2,1);will-change:transform}
+    .slides{
+      display:flex;
+      transition:transform .6s cubic-bezier(.4,0,.2,1);
+      will-change:transform;
+    }
     .slides img{
       min-width:100%;
       width:100%;
@@ -136,14 +132,19 @@
       object-fit:contain;
       max-height:360px;
 
-      /* bikin ujung gambar halus */
-      border-radius:22px;
+      /* gambar yang halus ujungnya */
+      border-radius:28px;
+
+      /* hilangkan efek kotak / card */
       background:transparent;
+      box-shadow:none;
       user-select:none;
       -webkit-user-drag:none;
     }
+
+    /* dots */
     .dots{
-      position:absolute;left:0;right:0;bottom:10px;
+      position:absolute;left:0;right:0;bottom:8px;
       display:flex;justify-content:center;gap:6px;padding:0 10px;
     }
     .dots button{
@@ -291,16 +292,14 @@
         </div>
       </div>
 
-      <!-- Slider -->
+      <!-- Slider POLOS -->
       <div class="hero-slider reveal" id="heroSlider">
-        <div class="frame">
-          <div class="viewport">
-            <div class="slides" id="heroSlides">
-              <img src="./hero1.jpg" alt="Hero 1">
-              <img src="./hero2.jpg" alt="Hero 2">
-              <img src="./hero3.jpg" alt="Hero 3">
-              <img src="./hero4.jpg" alt="Hero 4">
-            </div>
+        <div class="viewport">
+          <div class="slides" id="heroSlides">
+            <img src="./hero1.jpg" alt="Hero 1">
+            <img src="./hero2.jpg" alt="Hero 2">
+            <img src="./hero3.jpg" alt="Hero 3">
+            <img src="./hero4.jpg" alt="Hero 4">
           </div>
         </div>
         <div class="dots" id="heroDots"></div>
@@ -458,7 +457,6 @@
 
   <script>
     const $ = (q)=>document.querySelector(q);
-    const $$ = (q)=>document.querySelectorAll(q);
 
     $("#year").textContent = new Date().getFullYear();
     window.openDrawer = ()=>document.body.classList.add("drawer-open");
@@ -471,7 +469,7 @@
         if(en.isIntersecting){ en.target.classList.add("show"); io.unobserve(en.target); }
       });
     },{threshold:.12});
-    $$(".reveal").forEach(el=>io.observe(el));
+    document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 
     // slider
     const slider = $("#heroSlider");
