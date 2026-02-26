@@ -99,9 +99,19 @@
       color:rgba(255,255,255,.95);
       box-shadow:var(--shadow);
       transition:transform .12s ease;
+      gap:10px;
     }
     .btn:hover{transform:translateY(-1px)}
     .btn.primary{background:rgba(255,255,255,.95);color:#222;border-color:rgba(255,255,255,.30)}
+
+    /* icon image inside button (Google Play) */
+    .btn .btn-ico{
+      width:22px;
+      height:22px;
+      object-fit:contain;
+      display:inline-block;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,.08));
+    }
 
     /* hero */
     header.hero{padding:34px 0 18px}
@@ -141,8 +151,6 @@
       padding:18px 16px;box-shadow:0 12px 28px rgba(0,0,0,.10);
       border:1px solid rgba(0,0,0,.03);text-align:center;scroll-margin-top:88px;
     }
-
-    /* ICON layanan pakai link gambar */
     .service-icon{
       width:66px;height:66px;border-radius:999px;margin:0 auto 10px;
       display:flex;align-items:center;justify-content:center;
@@ -152,7 +160,6 @@
       width:34px;height:34px;object-fit:contain;display:block;
       filter:drop-shadow(0 6px 14px rgba(0,0,0,.08));
     }
-
     .service-card h3{margin:0 0 8px;font-size:20px;font-weight:800}
     .service-card p{margin:0;color:rgba(28,35,48,.62);font-size:14px;line-height:1.85}
 
@@ -314,9 +321,7 @@
         <div class="underline"></div>
         <p class="desc">Klik layanan di bawah ini untuk melihat detailnya.</p>
 
-        <!-- GANTI LINK ICON DI SINI -->
         <div class="service-cards">
-
           <div class="service-card reveal" id="layanan-pulsa">
             <div class="service-icon">
               <img id="ico-pulsa" src="https://buyer.duniadigitalsb.my.id/uploads/logo/pulsa-2.png" alt="Icon Pulsa & Paket Data">
@@ -364,7 +369,6 @@
             <h3>Bantuan</h3>
             <p>Dukungan bantuan untuk memudahkan penggunaan dan memastikan transaksi tetap lancar.</p>
           </div>
-
         </div>
       </div>
     </div>
@@ -380,8 +384,10 @@
         <div class="download-box reveal">
           <div>
             <a class="btn primary" href="https://play.google.com/store/apps/details?id=com.circelcuanmv" target="_blank" rel="noopener">
-              <i class="fa-brands fa-google-play" style="margin-right:10px"></i>Download di Google Play
+              <img class="btn-ico" src="https://buyer.duniadigitalsb.my.id/uploads/logo/googleplay.png" alt="Google Play">
+              Download di Google Play
             </a>
+
             <p style="margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.8">
               Unduh aplikasi CIRCELCUANMV dan nikmati kemudahan transaksi dari mana saja.
             </p>
@@ -443,7 +449,6 @@
           <div class="footer-h">Kontak</div>
           <div class="footer-line"></div>
 
-          <!-- GANTI LINK ICON KONTAK DI SINI -->
           <div class="contact-item">
             <img class="contact-ico" src="https://buyer.duniadigitalsb.my.id/uploads/logo/lokasi.png" alt="Lokasi">
             <div>Jl.Sidodadi air hitam lampung barat</div>
